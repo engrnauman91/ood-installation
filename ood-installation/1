@@ -1,0 +1,5 @@
+- name: Installation of Open ondemand
+  hosts: webservers
+  become: yes
+  role: ood-intallation
+

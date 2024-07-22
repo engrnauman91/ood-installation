@@ -1,0 +1,35 @@
+---
+- name: Installation of Open ondemand
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: enable powertools repository
+      command: dnf config-manager --set-enabled powertools
+
+    - name: Install EPEL release
+      dnf:
+        name: epel-release
+        state: present
+
+    - name: Enable Ruby module as per given version
+      command: dnf module enable ruby:3.1 -y
+
+    - name: Enable NodeJS module as per given version
+      command: dnf module enable nodejs:18 -y
+
+    - name: Install OnDemand release package as per given version
+      dnf:
+        name: https://yum.osc.edu/ondemand/3.1/ondemand-release-web-3.1-1.el8.noarch.rpm
+        state: present
+
+    - name: Install onDemand
+      dnf:
+        name: ondemand
+        state: present
+
+    - name: Start and Enable Apache
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
